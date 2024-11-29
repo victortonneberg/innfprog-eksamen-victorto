@@ -32,20 +32,26 @@
         </section>
         <section id="todoform">
             <h2>Ny oppgave</h2>
-            <p><label for="task">Oppgavetekst:</label><br /><input type="text" id="task" /><button id="savetask">Lagre</button></p>
+            <p>
+                <label for="task">Oppgavetekst:</label><br/>
+                <input type="text" id="task"/>
+                <button id="savetask" onclick="saveTaskClick()">Lagre</button>
+        </p>
         </section>
         <section id="todos">
             <h2>Oppgaver</h2>
             <ul id="todolist">
                 <!-- De to listeelementene skal byttes ut med utskrift av data fra programkoden i <script> -->
-                <li>
+
+                    <!--Kommenterer ut li-elementene siden jeg skal gjør det dynamisk med JavaScript.-->
+                <!-- <li>
                     <span class="tast-text">Les eksamensteksten</span>
                     <span class="task-status task-status-done">Done</span>
                 </li>
                 <li>
                     <span class="tast-text">Løs oppgavene i InnfProg-eksamen</span>
                     <span class="task-status task-status-todo">To do</span>
-                </li>
+                </li> -->
             </ul>
         </section>
         <footer><p>Adminpanel IPv1.0</p></footer>
@@ -63,10 +69,11 @@
 
         let contactlist = ""
 
+        //Lagt til mailto: på linjen under som handler om E-post. Dette gjør alle e-post adressene i "contacts" klikkbare.
         contacts.map((contact, index) => {
             contactlist += `<article>
                 <p><strong>${contact.lastname}, ${contact.firstname}</strong><br />
-                    Kontor: ${contact.office} | E-post: ${contact.mail}</p>
+                    Kontor: ${contact.office} | E-post: <a href="mailto:${contact.mail}">${contact.mail}</a></p>
             </article>`
         })
 
@@ -95,8 +102,75 @@
             {text: "Lag funksjonalitet for å sette en eksisterende oppgave til utført ved å endre status", status: "To do"}
         ]
 
+        //Tom variabel som sørger for at utskrift blir mulig.
+        let todoLi = ""
+
+        //.map for å gå igjennom hver oppgave i todos-arrayen. 
+        todos.map(todo => {
+            //Legger til nytt <li> med oppgavetekst og status i todoLi. Dette gjør HTML-elementet dynamisk.
+            //Bruker en ternary operator for å sjekke betingelse ("Done"). Da får listepunktet css-klassen "task-status-done". Hvis ikke, "task-status-todo".
+            todoLi += `
+            <li>
+                <span class="task-text">${todo.text}</span>
+                 <span class="task-status ${todo.status === "Done" ? "task-status-done" : "task-status-todo"}">${todo.status}</span>
+                 </li>
+                 `
+        })
+
+        //Oppdaterer <ul id="todolist"> ved å sette den dynamiske verdien som lages i todoLi.
+        document.getElementById("todolist").innerHTML = todoLi
+
+        //D-krav oppg.1:
+            function saveTaskClick() {
+                //Definerer variabel som henter tekst fra input feltet med id="task"
+                const inputFieldValue = document.getElementById("task").value
+
+                //Legger til tekst og status i array "todos"
+                todos.push({text: inputFieldValue, status: "To do"})
+
+                //Legger til oppgave i todolist HTML direkte.
+                document.getElementById("todolist").innerHTML += `
+                <li>
+                    <span class="task-text">${inputFieldValue}</span>
+                    <span class="task-status task-status-todo">To do</span>
+                </li>
+                `
+
+                //Tømmer inputfeltet hver gang funksjonen kjøres (onClick)
+                document.getElementById("task").value = ""
+            }
+            // console.log(todos);
+
         
         //CLOCK
+        //Kilde: https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock
+        //Gjorde noen justeringer, nytt variabelnavn (clock), samt at jeg bruker setInterval på utsiden av funksjonen. Mener at dette er best practise, og gir best mulig brukeropplevelse.
+        function currentTime() {
+            const clock = new Date()
+            let h = clock.getHours()
+            let m = clock.getMinutes()
+            let s = clock.getSeconds()
+            // console.log("CT kjører");
+
+            //Jeg fant ut at klokken ikke tar hensyn til 2 sifre, og har da laget if-tester som sørger for at "0" blir lagt til hvis sifferet er under 10.
+            if(h < 10) {
+                h = "0" + h
+            }
+
+            if(m < 10) {
+                h = "0" + h
+            }
+
+            if(s < 10) {
+                h = "0" + h
+            }
+
+            document.getElementById("clock").innerHTML = h + ":" + m + ":" + s
+        }
+
+        //Kjører funksjonen, i tillegg til setInterval som sørger for at koden kjøres hvert 1000ms.
+        currentTime()
+        setInterval(currentTime, 1000)
         
     </script>
 </body>

@@ -23,12 +23,13 @@
             hx: "Efmfltbnfo 1",
             ix: "A sfuuf gfjmfof ph lpnnfoufsf lpefo wbs cbsf gåstuf efm bw pqqhbwfo. Ev tlbm phta ub gps efh ufltufo ev tlsfw j bscfjetlsbw 1, ph tlsjwf fu ozuu sfgmfltkpotopubu oa oas ev ibs hkfoopngåsu lvstfu. J efuuf sfgmfltkpotopubufu, twbs qa gåmhfoef tqåstnam:",
             qx: ["Botfs ev qsphsbnnfsjoh tpn ozuujh?", "Tfs ev gps efh bu ev wjm csvlf qsphsbnnfsjoh j ejuu wjefsf tuvejfmåq?", "Iwps npujwfsu fs ev gps a vugpstlf qsphsbnnfsjoh wjefsf fuufs lvstfu?"],
-            dx= "Mbh fo QEG bw eplvnfoufu, ph mfhh wfe caef efuuf eplvnfoufu tbnu cftwbsfmtfo gps bscfjetlsbw 1 j cftwbsfmtfo ujm efmfltbnfo 1."
+            //Feil 3: Linje 27. Ble brukt = istedenfor : i objektet "code". Løste det ved å bytte tegn
+            dx: "Mbh fo QEG bw eplvnfoufu, ph mfhh wfe caef efuuf eplvnfoufu tbnu cftwbsfmtfo gps bscfjetlsbw 1 j cftwbsfmtfo ujm efmfltbnfo 1."
         }
 
         function decode(input) {
             const alphabet = 'abcdefghijklmnopqrstuvwxyzæøå'
-            const alphabetUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ
+            const alphabetUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ' //Feil 1: Denne linjen. Manglet apostrof i string med alfabetet. Løste det ved å legge på ' på slutten av string. 
 
             const getPreviousChar = (char, alphabet) => {
                 const index = alphabet.indexOf(char);
@@ -36,7 +37,7 @@
             };
 
             return input.split('').map(char => {
-                if (alphabetT.includes(char)) {
+                if (alphabet.includes(char)) { //Feil 4: Denne linjen. Ekstra T etter "alphabet". Løste ved å fjerne den ekstra bokstaven.
                     return getPreviousChar(char, alphabet)
                 } else if (alphabetUpper.includes(char)) {
                     return getPreviousChar(char, alphabetUpper)
@@ -48,9 +49,9 @@
         //PRINT DECODED MATERIAL
         document.getElementById("heading").innerHTML = decode(code.hx)
         document.getElementById("intro").innerHTML = decode(code.ix)
-        document.getElementById("q1").innerhtml = decode(code.qx[0])
-        document.getElementByID("q2").innerHTML = decode(code.qx[1])
-        document.getElementById("q3").innerHTML = decode(code.qx[2)
+        document.getElementById("q1").innerHTML = decode(code.qx[0]) //Feil 5: Denne linjen. Var skrevet "innerhtml", og løste det ved å skrive "innerHTML". JS er case-sensetive.
+        document.getElementById("q2").innerHTML = decode(code.qx[1]) //Feil 6: Denne linjen. Var skrevet "getElementByID", og løste det ved å skrive "getElementById". JS er case-sensetive. JS er case-sensetive.
+        document.getElementById("q3").innerHTML = decode(code.qx[2]) //Feil 2: Denne linjen. Manglet bracket på enden av tallet 2. Løste ved å legge på bracket eter 2-tallet.
         document.getElementById("delivery").innerHTML = decode(code.dx)
     </script>
 </body>

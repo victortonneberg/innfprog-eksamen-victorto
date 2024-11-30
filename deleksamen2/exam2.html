@@ -67,6 +67,11 @@
             {lastname: "Jansson", firstname: "Sigried", office: "B1", mail: "s.jansson@company.com"}
         ]
 
+        //C, 1: Etter endel research kom jeg frem til at jeg burde inkludere localeCompare når jeg sorterer arrayen, fordi norske navn ofte kan inneholde bokstaver utenfor det engelske alfabetet.
+        // Kilde for sort() og localCompare: https://wfernandoaugusto01.medium.com/sorting-data-alphabetically-localecompare-sort-e3d314708f8c
+        contacts.sort((a, b) => a.lastname.localeCompare(b.lastname));
+
+        //Tom variabel som sørger for at utskrift blir mulig.
         let contactlist = ""
 
         //Lagt til mailto: på linjen under som handler om E-post. Dette gjør alle e-post adressene i "contacts" klikkbare.
@@ -89,6 +94,24 @@
             {text: "Nettbutikksalg, uke 45", date: "13.11.24", amount: 2988}
         ]
 
+        //Tom variabel som sørger for at utskrift blir mulig.
+        let bookingLi = ""
+
+        //.map for å gå igjennom alle bokføringer i books-arrayen.
+        books.map(book => {
+            //Generer og legger til linjene fra books i bookingLi.
+            bookingLi += `
+            <div class="bookline">
+                <span class="booktext">${book.text}</span>
+                <span class="bookdate">${book.date}</span>
+                <span class="bookamount">${book.amount}</span>
+                </div>
+                `
+        })
+
+        //Oppdaterer <div id="booklines"> ved å sette den dynamiske verdien som lages i bookingLi.
+        document.getElementById("booklines").innerHTML = bookingLi
+
         let equity = 23782; //Penger på konto ved inngangen til november
         document.getElementById("incomingequity").innerHTML = equity
         let balance = 0;    //Startbalanse for utregning av utgifter og inntekter i november
@@ -101,6 +124,9 @@
             {text: "Lag funksjonalitet for å registrere nye oppgaver", status: "To do"},
             {text: "Lag funksjonalitet for å sette en eksisterende oppgave til utført ved å endre status", status: "To do"}
         ]
+        
+        //For å bekrefte at ny oppgave blir pushet til todos array.
+        console.log(todos)
 
         //Tom variabel som sørger for at utskrift blir mulig.
         let todoLi = ""
@@ -123,7 +149,16 @@
         //D-krav oppg.1:
             function saveTaskClick() {
                 //Definerer variabel som henter tekst fra input feltet med id="task"
-                const inputFieldValue = document.getElementById("task").value
+                //Kilde for trim(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim
+                const inputFieldValue = document.getElementById("task").value.trim()
+
+                //Sjekker om inputFieldValue er tom. Hvis ja, vil en HTML alert advare bruker. Fant ut at det var mulig å sende inn inputfeltet med bare mellomrom. 
+                //Dette løste jeg ved å bruke .trim() på linjen over som definerer inputFieldValue. 
+                if(inputFieldValue === "") {
+                    alert("Oppgaveteksten kan ikke være tom.")
+                    //Asvlutter funkjsonen hvis status er true. 
+                    return 
+                }else {
 
                 //Legger til tekst og status i array "todos"
                 todos.push({text: inputFieldValue, status: "To do"})
@@ -139,9 +174,8 @@
                 //Tømmer inputfeltet hver gang funksjonen kjøres (onClick)
                 document.getElementById("task").value = ""
             }
-            // console.log(todos);
-
-        
+         }
+   
         //CLOCK
         //Kilde: https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock
         //Gjorde noen justeringer, nytt variabelnavn (clock), samt at jeg bruker setInterval på utsiden av funksjonen. Mener at dette er best practise, og gir best mulig brukeropplevelse.
@@ -158,11 +192,11 @@
             }
 
             if(m < 10) {
-                h = "0" + h
+                m = "0" + m
             }
 
             if(s < 10) {
-                h = "0" + h
+                s = "0" + s
             }
 
             document.getElementById("clock").innerHTML = h + ":" + m + ":" + s

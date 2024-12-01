@@ -45,15 +45,18 @@
         //Array som kan lagre hexa-fargekoder.
         let hexaArray = []
 
-        //Henter HTML elementet "addColor", slik at jeg lettere kan bruke den i addEventListener.
+        //Henter HTML elementeter, slik at jeg lettere kan bruke de i addEventListener.
         const addColorBtn = document.getElementById("addColor")
+        const resetColorBtn = document.getElementById("emptyArray")
 
         //addEventListener for "Legg til en farge"-button.
         addColorBtn.addEventListener("click", function() {
             //Sjekker om lengden på hexaArray =< 9 (fordi array starter med index 0). Hvis true, genererer den hexa-fargekode.
-            //Kilde for generering av hexa-fargekode: https://css-tricks.com/snippets/javascript/random-hex-color/
+            //Kilde for generering av random hexa-fargekode: https://css-tricks.com/snippets/javascript/random-hex-color/
+            //Etter litt testing så jeg at newHexa noen ganger genererte kun 5 "symboler". Research gjorde at jeg fant en kommentar under denne artikkelen som la til .padStart for å forhindre alt under 6 siffer/bostaver.
+            //Kilde: https://dev.to/akhil_001/generating-random-color-with-single-line-of-js-code-fhj
             if(hexaArray.length <= 9) {
-                const newHexa = "#" + Math.floor(Math.random()*16777215).toString(16)
+                const newHexa = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0")
 
                 //Legger til den genererte hexa-fargekoden i hexaArray.
                 hexaArray.push(newHexa)
@@ -66,9 +69,58 @@
             }
         })
 
+        //addEventListener for "Tilbakestill fargene".
+        resetColorBtn.addEventListener("click", function() {
+
+            //Tømmer hexaArray for alle lagrede farger.
+            hexaArray = []
+
+            //Fjerner alt innhold som er tegnet i canvas.
+            ctx.clearRect(0, 0, canvas.width, canvas.width)
+
+            //Gir beskjed at alle farger er tilbakestilt.
+            console.log("Alle farger er tilbakestilt")
+        })
+
+
+
+        function drawColors() {
+            //Fjerner alt tidligere innhold som er tegnet i canvas.
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            //Bruker forEach for å iterere igjennom hvert element i hexaArray.
+            //Sender med parameterne color (fargekoden) og index (posisjonen i hexaArray). 
+            //Color gir hexakoden på den gjeldende indexen i arrayet.
+            hexaArray.forEach((color, index) => {
+                
+                const square = 100
+                const squareX = index * square
+                
+                //Tegner fargekvadradet.
+                ctx.fillStyle = color
+                ctx.fillRect(squareX, 0, square, square)
+
+                //Tegner hexakoden i fargekvadradet i tillegg til et hvitt rektangel i bakgrunn.
+                ctx.fillStyle = "white"
+                ctx.fillRect(squareX + 0, 0, 60, 20)
+                ctx.fillStyle = "black"
+                ctx.font = "12px Arial"
+                ctx.fillText(color, squareX + 5, 15)
+
+                //Tegner hvilken index i hexaArray som tegnes i tillegg til et hvitt rektangel i bakgrunn.
+                ctx.fillStyle = "white"
+                ctx.fillRect(squareX + square - 25, square - 20, 25, 25);
+                ctx.fillStyle = color
+                ctx.fillText(index + 1, squareX + square - 15, square - 5)
+            })
+        }
+
+
         //requestAnimationFrame
         const requestAnimationFrame = window.requestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
         function renderCanvas() {
+
+            drawColors()
             
             requestAnimationFrame(renderCanvas)
         }

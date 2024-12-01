@@ -42,6 +42,29 @@
 
         /* --- YOUR FUNCTIONALITY AND CODE GOES HERE --- */
         
+        //Array som kan lagre hexa-fargekoder.
+        let hexaArray = []
+
+        //Henter HTML elementet "addColor", slik at jeg lettere kan bruke den i addEventListener.
+        const addColorBtn = document.getElementById("addColor")
+
+        //addEventListener for "Legg til en farge"-button.
+        addColorBtn.addEventListener("click", function() {
+            //Sjekker om lengden på hexaArray =< 9 (fordi array starter med index 0). Hvis true, genererer den hexa-fargekode.
+            //Kilde for generering av hexa-fargekode: https://css-tricks.com/snippets/javascript/random-hex-color/
+            if(hexaArray.length <= 9) {
+                const newHexa = "#" + Math.floor(Math.random()*16777215).toString(16)
+
+                //Legger til den genererte hexa-fargekoden i hexaArray.
+                hexaArray.push(newHexa)
+
+                //Konsoll-logger alle genererte hexakoder.
+                console.log(hexaArray)
+            } else {
+                //Gir beskjed hvis hexaArray har 10 verdier.
+                console.log("Maks antall farger (10) er nådd!")
+            }
+        })
 
         //requestAnimationFrame
         const requestAnimationFrame = window.requestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame

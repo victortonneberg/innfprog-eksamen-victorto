@@ -47,7 +47,14 @@
 
         //Henter HTML elementeter, slik at jeg lettere kan bruke de i addEventListener.
         const addColorBtn = document.getElementById("addColor")
+        const generateAllBtn = document.getElementById("generateAll")
         const resetColorBtn = document.getElementById("emptyArray")
+
+        //Funksjon som endrer status på addColorBtn til disabled hvis hexaArray.length er 10.
+        //Kilde: https://www.w3schools.com/jsreF/prop_pushbutton_disabled.asp
+        function disableaddColorBtn() {
+            addColorBtn.disabled = hexaArray.length >= 10
+        }
 
         //addEventListener for "Legg til en farge"-button.
         addColorBtn.addEventListener("click", function() {
@@ -55,7 +62,7 @@
             //Kilde for generering av random hexa-fargekode: https://css-tricks.com/snippets/javascript/random-hex-color/
             //Etter litt testing så jeg at newHexa noen ganger genererte kun 5 "symboler". Research gjorde at jeg fant en kommentar under denne artikkelen som la til .padStart for å forhindre alt under 6 siffer/bostaver.
             //Kilde: https://dev.to/akhil_001/generating-random-color-with-single-line-of-js-code-fhj
-            if(hexaArray.length <= 9) {
+            if(hexaArray.length < 10) {
                 const newHexa = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0")
 
                 //Legger til den genererte hexa-fargekoden i hexaArray.
@@ -63,10 +70,32 @@
 
                 //Konsoll-logger alle genererte hexakoder.
                 console.log(hexaArray)
-            } else {
-                //Gir beskjed hvis hexaArray har 10 verdier.
-                console.log("Maks antall farger (10) er nådd!")
+                
             }
+            //Kjører funksjonen disableaddColorBtn hver gang addColorBtn klikkes. Dette gjør at det sjekker .length på hexaArray ved hvert klikk.
+            disableaddColorBtn()
+        })
+
+        //addEventListener for "Generer 10 nye farger"-button.
+        generateAllBtn.addEventListener("click", function () {
+            //Tømmer hexaArray for allerede genererte farger slik at det genereres nye tilfeldige hexakoder.
+            hexaArray = []
+
+            //Bruker for-løkke for å kjøre koden 10 ganger. Dette gjør at hexaArray får 10 nye genererte fargekoder.
+            //Kilde: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration
+            for(let generateAll = 0; generateAll < 10; generateAll++) {
+                //Definerer newHexa på samme måte som i addColorBtn fordi det er separate funksjoner.
+                const newHexa = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0")
+
+                //Legger til de genererte hexa-fargekoden i hexaArray.
+                hexaArray.push(newHexa)
+            }
+
+            //Konsoll-logger all genererte hexakoder for å bekrefte at det fungerer.
+            console.log(hexaArray)
+
+            //Kjører funksjonen disableaddColorBtn hver gang generateAllBtn klikkes. Dette gjør at det sjekker .length på hexaArray ved hvert klikk.
+            disableaddColorBtn()
         })
 
         //addEventListener for "Tilbakestill fargene".
@@ -78,11 +107,13 @@
             //Fjerner alt innhold som er tegnet i canvas.
             ctx.clearRect(0, 0, canvas.width, canvas.width)
 
-            //Gir beskjed at alle farger er tilbakestilt.
-            console.log("Alle farger er tilbakestilt")
+            //Gir beskjed at alle farger er tilbakestilt, og bekrefter det ved å konsoll-logge hexaArray.
+            console.log(hexaArray, "Alle farger er tilbakestilt")
+            //Kjører funksjonen disableaddColorBtn hver gang resetColorBtn klikkes. Dette gjør at det sjekker .length på hexaArray ved hvert klikk. Siden hexaArray tømmes i funksjonen over,
+            //vil addColorBtn få status enabled.
+            disableaddColorBtn()
+
         })
-
-
 
         function drawColors() {
             //Fjerner alt tidligere innhold som er tegnet i canvas.
@@ -90,10 +121,11 @@
 
             //Bruker forEach for å iterere igjennom hvert element i hexaArray.
             //Sender med parameterne color (fargekoden) og index (posisjonen i hexaArray). 
-            //Color gir hexakoden på den gjeldende indexen i arrayet.
+            //color gir hexakoden på den gjeldende indexen i arrayet.
             hexaArray.forEach((color, index) => {
                 
                 const square = 100
+                //For å plassere firkant på riktig plassering, regner ut hvor på x-akse den skal plasseres basert på index i array.
                 const squareX = index * square
                 
                 //Tegner fargekvadradet.

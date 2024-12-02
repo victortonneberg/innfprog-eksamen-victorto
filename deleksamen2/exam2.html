@@ -152,7 +152,7 @@
                 //Kilde for trim(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim
                 const inputFieldValue = document.getElementById("task").value.trim()
 
-                //Sjekker om inputFieldValue er tom. Hvis ja, vil en HTML alert advare bruker. Fant ut at det var mulig å sende inn inputfeltet med bare mellomrom. 
+                //Sjekker om inputFieldValue er tom. Hvis ja, vil en HTML-alert advare bruker og det vil ikke bli lagt til noe nytt i todos. Fant ut at det var mulig å sende inn inputfeltet med bare mellomrom. 
                 //Dette løste jeg ved å bruke .trim() på linjen over som definerer inputFieldValue. 
                 if(inputFieldValue === "") {
                     alert("Oppgaveteksten kan ikke være tom.")

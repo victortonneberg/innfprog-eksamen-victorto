@@ -114,9 +114,25 @@
 
         let equity = 23782; //Penger på konto ved inngangen til november
         document.getElementById("incomingequity").innerHTML = equity
+
         let balance = 0;    //Startbalanse for utregning av utgifter og inntekter i november
 
+        //Bruker forEach fordi det fungerer bra for å gjøre matematisk utregning av tall i en array ref. LMS. 
+        //Summerer amount i books-variabelen og lagrer det i balance.
+        books.forEach(book => {
+            balance += book.amount
+        })
 
+        //Skriver ut den nye utregnede balance til HTML.
+        document.getElementById("balance").innerHTML = balance
+
+        //Regner ut ny egenkapital med å definere variabel (newEquity).
+        let newEquity = equity + balance
+
+        //Skriver ut den nye utregnede egenkapital til HTML.
+        document.getElementById("equity").innerHTML = newEquity
+
+        
         //TODOS
         const todos = [
             {text: "Les eksamensteksten", status: "Done"},

@@ -58,7 +58,7 @@
 
         //addEventListener for "Legg til en farge"-button.
         addColorBtn.addEventListener("click", function() {
-            //Sjekker om lengden på hexaArray =< 9 (fordi array starter med index 0). Hvis true, genererer den hexa-fargekode.
+            //Sjekker om lengden på hexaArray < 10 (fordi array starter med index 0). Hvis true, genererer den hexa-fargekode.
             //Kilde for generering av random hexa-fargekode: https://css-tricks.com/snippets/javascript/random-hex-color/
             //Etter litt testing så jeg at newHexa noen ganger genererte kun 5 "symboler". Research gjorde at jeg fant en kommentar under denne artikkelen som la til .padStart for å forhindre alt under 6 siffer/bostaver.
             //Kilde: https://dev.to/akhil_001/generating-random-color-with-single-line-of-js-code-fhj
@@ -114,6 +114,25 @@
             disableaddColorBtn()
 
         })
+
+        //addEventListener for "Lagre ny farge"
+        saveNewColor.addEventListener("click", function() {
+
+            //Henter verdien fra input-feltet id="newColor" der ny fargekode skrives.
+            //Legger til "#" foran verdi for å sørge for at det blir hexakode.
+            const saveNewColor = "#" + document.getElementById("newColor").value
+
+            //Henter verdien fra rullgardin-meny id="colorSquareIndex"
+            //Verdien som hentes bestemmer hvilkken firkant/index i hexaArray som skal oppdateres.
+            const colorSquareIndex = document.getElementById("colorSquareIndex").value
+
+            //Oppdaterer hexaArray på index bruker har valgt. Setter deretter valgt hexakode på index bruker har valgt.
+            hexaArray[colorSquareIndex] = saveNewColor
+
+            //Logger hexaArray til konsoll for å bekrefte at hexaArray er endret med riktig hexakode.
+            console.log("Oppdatert hexaArray:", hexaArray)
+        })
+
 
         function drawColors() {
             //Fjerner alt tidligere innhold som er tegnet i canvas.

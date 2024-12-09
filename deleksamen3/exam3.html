@@ -126,6 +126,41 @@
             //Verdien som hentes bestemmer hvilkken firkant/index i hexaArray som skal oppdateres.
             const colorSquareIndex = document.getElementById("colorSquareIndex").value
 
+            //Sjekker om det finnes farger lagret i hexaArray. Hvis hexaArray har 0 strenger, vises alert.
+            if(hexaArray.length === 0) {
+                alert("Det er ingen firkanter som kan bytte farge enda.")
+                //Bruker return for å avslutte funksjonen
+                return
+            }
+
+            //Hvis ikke hexaArray[colorSquareIndex] har en hexakode, får man HTML-alert. 
+            if(!hexaArray[colorSquareIndex]) {
+                alert("Velg en firkant som allerede har en farge!")
+                //Bruker return for å avslutte funksjonen, slik at det ikke lagres endret farge i hexaArray.
+                return
+            }
+
+            //Kilde:https://www.geeksforgeeks.org/javascript-check-if-a-string-is-a-valid-hex-color-representation/
+            //Definerer en regex jeg under bruker for å sjekke om saveNewColor-strengen som mottas er en gyldig hexakode.
+            const validHex = /^#[0-9A-F]{6}$/i;
+
+            //Sjekker om saveNewColor ikke matcher med mønsteret definert i validHex. .test() returnerer TRUE hvis tekststrengen som hentes er en gyldig hexakode.
+            //https://www.w3schools.com/jsref/jsref_regexp_test.asp
+            if(!validHex.test(saveNewColor)) {
+                //Bruker en template literal i alert slik at den ugyldige fargekoden "kommer med" i alerten.
+                alert(`Du har skrevet ${saveNewColor}. Dette er ikke en gyldig fargekode.`)
+                //Bruker return for å avslutte funksjonen, slik at det ikke gjøres endringer i hexaArray hvis det er oppgitt ugyldig hexakode.
+                return
+            }
+
+            //Sjekker om inputfeltet er tomt. Bruker trim() for å fjerne eventuelle "whitespace".
+            //Kilde: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim
+            if(document.getElementById("newColor").value.trim() === "") {
+                alert("Du har ikke skrevet noen fargekode enda.")
+                //Bruker return for å avslutte funksjonen.
+                return
+            }
+
             //Oppdaterer hexaArray på index bruker har valgt. Setter deretter valgt hexakode på index bruker har valgt.
             hexaArray[colorSquareIndex] = saveNewColor
 

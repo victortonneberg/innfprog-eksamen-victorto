@@ -123,23 +123,18 @@
             const saveNewColor = "#" + document.getElementById("newColor").value
 
             //Henter verdien fra rullgardin-meny id="colorSquareIndex"
-            //Verdien som hentes bestemmer hvilkken firkant/index i hexaArray som skal oppdateres.
-            const colorSquareIndex = document.getElementById("colorSquareIndex").value
+            //Verdien som hentes bestemmer hvilken firkant/index i hexaArray som skal oppdateres.
+            //Bruker pareInt for å konvertere til tall. Hvis ikke blir det feil videre i koden når jeg bruker verdier som +1, -1 etc. fordi det opprinnelig er en string.
+            const colorSquareIndex = parseInt(document.getElementById("colorSquareIndex").value)
 
-            //Sjekker om det finnes farger lagret i hexaArray. Hvis hexaArray har 0 strenger, vises alert.
-            if(hexaArray.length === 0) {
-                alert("Det er ingen firkanter som kan bytte farge enda.")
-                //Bruker return for å avslutte funksjonen
+            //Sjekker om inputfeltet er tomt. Bruker trim() for å fjerne eventuell "whitespace".
+            //Kilde: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim
+            if(document.getElementById("newColor").value.trim() === "") {
+                alert("Du har ikke skrevet noen fargekode enda.")
+                //Bruker return for å avslutte funksjonen hvis true.
                 return
             }
-
-            //Hvis ikke hexaArray[colorSquareIndex] har en hexakode, får man HTML-alert. 
-            if(!hexaArray[colorSquareIndex]) {
-                alert("Velg en firkant som allerede har en farge!")
-                //Bruker return for å avslutte funksjonen, slik at det ikke lagres endret farge i hexaArray.
-                return
-            }
-
+            
             //Kilde:https://www.geeksforgeeks.org/javascript-check-if-a-string-is-a-valid-hex-color-representation/
             //Definerer en regex jeg under bruker for å sjekke om saveNewColor-strengen som mottas er en gyldig hexakode.
             const validHex = /^#[0-9A-F]{6}$/i;
@@ -153,11 +148,17 @@
                 return
             }
 
-            //Sjekker om inputfeltet er tomt. Bruker trim() for å fjerne eventuelle "whitespace".
-            //Kilde: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim
-            if(document.getElementById("newColor").value.trim() === "") {
-                alert("Du har ikke skrevet noen fargekode enda.")
+            //Sjekker om det finnes farger lagret i hexaArray. Hvis hexaArray har 0 strenger, vises alert.
+            if(hexaArray.length === 0) {
+                alert("Det er ingen firkanter som kan bytte farge enda.")
                 //Bruker return for å avslutte funksjonen.
+                return
+            }
+
+            //Sjekker om indexen brukeren prøver å endre allerede har en gyldig hexakode.
+            if(!hexaArray[colorSquareIndex]) {
+                //Bruker template literal i alert slik at det blir dynamisk verdi, og brukeren får beskjed om nøyaktig hva som er feil. 
+                alert(`Du har valgt firkant ${colorSquareIndex + 1}. Denne har ikke farge enda, og kan derfor ikke byttes. Du kan endre farge på firkant 1 til ${hexaArray.length}.`)
                 return
             }
 

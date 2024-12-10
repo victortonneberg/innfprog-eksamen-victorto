@@ -162,6 +162,25 @@
         //Oppdaterer <ul id="todolist"> ved å sette den dynamiske verdien som lages i todoLi.
         document.getElementById("todolist").innerHTML = todoLi
 
+        //Function med addEventListener som manipulerer HTML koden ved klikk.
+        //Hentet inspirasjon fra disse kildene: https://stackoverflow.com/questions/77786858/detect-click-inside-an-element-with-delegation-and-when-the-element-is-selected?utm_source=chatgpt.com
+        //https://stackoverflow.com/questions/7723188/what-properties-can-i-use-with-event-target
+        document.getElementById("todolist").addEventListener("click", function(event) {
+            //Sjekker om det klikkede elementet i todolist har klassen "task-status".
+            if(event.target.classList.contains("task-status")) {
+                //Hvis TRUE, endres teksten til "Done", klassen "task-status-done" legges til og klassen "task-status-todo" fjernes.
+                //Denne løsningen fungerer greit fordi det ikke trengs å bytte status tilbake til "task-status-todo". 
+                //Ikke mest ressursbesparende, men det funker for formålet i denne sammenhengen.
+                event.target.textContent = "Done"
+                event.target.classList.add("task-status-done")
+                event.target.classList.remove("task-status-todo")
+
+            }
+        })
+
+
+
+
         //D-krav oppg.1:
             function saveTaskClick() {
                 //Definerer variabel som henter tekst fra input feltet med id="task"

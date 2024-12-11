@@ -69,7 +69,7 @@
 
         //C, 1: Etter endel research kom jeg frem til at jeg burde inkludere localeCompare når jeg sorterer arrayen, fordi norske navn ofte kan inneholde bokstaver utenfor det engelske alfabetet.
         // Kilde for sort() og localCompare: https://wfernandoaugusto01.medium.com/sorting-data-alphabetically-localecompare-sort-e3d314708f8c
-        contacts.sort((a, b) => a.lastname.localeCompare(b.lastname));
+        contacts.sort((a, b) => a.lastname.localeCompare(b.lastname))
 
         //Tom variabel som sørger for at utskrift blir mulig.
         let contactlist = ""
@@ -141,110 +141,85 @@
             {text: "Lag funksjonalitet for å sette en eksisterende oppgave til utført ved å endre status", status: "To do"}
         ]
         
-        //For å bekrefte at ny oppgave blir pushet til todos array.
-        // console.log(todos)
-
-        //Tom variabel som sørger for at utskrift blir mulig.
+        //Tom variabel for å lagre nye oppgaver.
         let todoLi = ""
 
-        //.map for å gå igjennom hver oppgave i todos-arrayen. 
-        todos.map(todo => {
-            //Legger til nytt <li> med oppgavetekst og status i todoLi. Dette gjør HTML-elementet dynamisk.
+        //Bruker .map for å gå igjennom alle oppgavene i array "todos" og legger de til i "todoLi".
+        todos.map((todos, index) => {
+            //Legger til nytt <li> med oppgavetekst og status i todoLi. Dette gjør HTML-elementet dynamisk. Jeg legger det inni en button slik at jeg senere kan bruke onclick for å oppdatere status.
             //Bruker en ternary operator for å sjekke betingelse ("Done"). Da får listepunktet css-klassen "task-status-done". Hvis ikke, "task-status-todo".
-            todoLi += `
-            <li>
-                <span class="task-text">${todo.text}</span>
-                 <span class="task-status ${todo.status === "Done" ? "task-status-done" : "task-status-todo"}">${todo.status}</span>
-                 </li>
-                 `
+            todoLi += `<li> 
+                <span class="task-text">${todos.text}</span>
+                <button id="statusButton" class="task-status ${todos.status === "Done" ? "task-status-done" : "task-status-todo"}" onclick="updateStatus(${index})">${todos.status}</button>
+            </li>`
         })
 
-        //Oppdaterer <ul id="todolist"> ved å sette den dynamiske verdien som lages i todoLi.
+        //Oppdaterer <ul id="todolist"> ved å sette den nye dynamiske verdien som lagres i "todoLi".
         document.getElementById("todolist").innerHTML = todoLi
-        // console.log(todos);
 
-        // //Function med addEventListener som manipulerer HTML koden ved klikk.
-        // //Hentet inspirasjon fra disse kildene: https://stackoverflow.com/questions/77786858/detect-click-inside-an-element-with-delegation-and-when-the-element-is-selected?utm_source=chatgpt.com
-        // //https://stackoverflow.com/questions/7723188/what-properties-can-i-use-with-event-target
-        // document.getElementById("todolist").addEventListener("click", function(event) {
-        //     //Sjekker om det klikkede elementet i todolist har klassen "task-status".
-        //     if(event.target.classList.contains("task-status")) {
-        //         //Hvis TRUE, endres teksten til "Done", klassen "task-status-done" legges til og klassen "task-status-todo" fjernes.
-        //         //Denne løsningen fungerer greit fordi det ikke trengs å bytte status tilbake til "task-status-todo". 
-        //         //Ikke mest ressursbesparende, men det funker for formålet i denne sammenhengen.
-        //         event.target.textContent = "Done"
-        //         event.target.classList.add("task-status-done")
-        //         event.target.classList.remove("task-status-todo")
-
-        //     }
-        // })
-
-
-        //addEventListener med click på ul id="todolist". Function kjøres ved registrert klikk.
-        //Kilde: https://stackoverflow.com/questions/77786858/detect-click-inside-an-element-with-delegation-and-when-the-element-is-selected?utm_source=chatgpt.com
-        document.getElementById("todolist").addEventListener("click", function(event) {
-            //Sjekker om elementet som klikkes på inneholder CSS-klassen "task-status"
-            if(event.target.classList.contains("task-status")) {
-                //Lagrer det nærmeste li-elementet som klikeks i "li". Dette må gjøres fordi den synlige statusen man klikker på i HTML er et span-element som ligger inni et li-element.
-                //De 3 variablene under brukte jeg AI for å få hjelp (ChatGPT, Dato: 11.12.24). Jeg brukte følgende prompt i tillegg til at jeg ga den koden jeg allerede hadde skrevet som manipulerte HTML,
-                //og som viser arrayet "todos."
-                //Prompt: Jeg ønsker å registrere klikkhendelser på listepunktene som ligger i ul id="todolist">). Hver oppgave har en status i array "todos" (To do eller Done) som vises i et <span>-element inni <li>. 
-                //Ved klikk på et status-element (<span>), skal koden finne indexen til det klikkede listeelementet. Videre må status i arrayet "todos" manipuleres. 
-                const li = event.target.closest('li');
-                //Alle li-elementer fra ul id="todolist" hentes og lagres i en NodeList. Dette er mulig ved hjelp av querySelectorAll.
-                //Deretter brukes Array.from for å lage en ekte array med dataen fra NodeListen. 
-                //Dette blir en kopi av array "todos", siden visningen i HTML speiler hva som allerede ligger der, i tillegg til nye oppgaver som blir pushet til "todos".
-                const copyTodos = Array.from(document.querySelectorAll('#todolist li'));
-                //Finner index til li-elementet som er klikket på.
-                const index = copyTodos.indexOf(li);
-                
-                //Sjekker om statusen til index vi har hentet over er "To do". 
-                if (todos[index].status === "To do") {
-                    //Hvis TRUE, endres status på valgt index til "Done" i "todos".
-                    todos[index].status = "Done";
-                    
-                    //Hvis TRUE, endres teksten til "Done", klassen "task-status-done" legges til og klassen "task-status-todo" fjernes.
-                    //Kilde: https://stackoverflow.com/questions/7723188/what-properties-can-i-use-with-event-target
-                    event.target.textContent = "Done";
-                    event.target.classList.add("task-status-done");
-                    event.target.classList.remove("task-status-todo");
-                    //Konsoll-logger todos for å bekrefte at statusendringen er gjort i arrayet. 
-                    console.log("Oppdatert array etter statusendring:", todos);
-                }
+        //Funksjon for å oppdatere status i arrayet "todos".
+        //Hvis button som har onclick="updateStatus(${index})" klikkes på, kjøres denne funksjonen.
+        function updateStatus(index) {
+            //Bruker index for å finne riktig oppgave i "todos".
+            //Hvis elementet som klikkes på har status "To do", endres de til status "Done" i arrayet "todos".
+            if (todos[index].status === "To do") {
+                todos[index].status = "Done"
             }
-        })
 
+            //Tømmer "todoLi" slik at hele listen regenereres.
+            todoLi = ""
 
-        //D-krav oppg.1:
-            function saveTaskClick() {
-                //Definerer variabel som henter tekst fra input feltet med id="task"
-                //Kilde for trim(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim
-                const inputFieldValue = document.getElementById("task").value.trim()
+            //Regenerer hele listen på lik måte den ble laget over.
+            todos.map((todo, index) => {
+                todoLi += `<li> 
+                    <span class="task-text">${todo.text}</span>
+                    <button id="statusButton" class="task-status ${todo.status === "Done" ? "task-status-done" : "task-status-todo"}" onclick="updateStatus(${index})">${todo.status}</button>
+                </li>`
+            })
 
-                //Sjekker om inputFieldValue er tom. Hvis ja, vil en HTML-alert advare bruker og det vil ikke bli lagt til noe nytt i todos. Fant ut at det var mulig å sende inn inputfeltet med bare mellomrom. 
-                //Dette løste jeg ved å bruke .trim() på linjen over som definerer inputFieldValue. 
-                if(inputFieldValue === "") {
-                    alert("Oppgaveteksten kan ikke være tom.")
-                    //Asvlutter funkjsonen hvis status er true. 
-                    return 
-                } else {
+            //Oppdaterer <ul id="todolist"> ved å sette den nye dynamiske verdien som lagres i "todoLi".
+            document.getElementById("todolist").innerHTML = todoLi
+            //Konsoll-logger at ny status er registrert.
+            console.log("Oppdatert status:", todos)
+        }
 
-                //Legger til tekst og status i array "todos"
-                todos.push({text: inputFieldValue, status: "To do"})
+        //Funksjon for å legge til ny oppgave
+        function saveTaskClick() {
+            //Definerer variabel som henter tekst fra input feltet med id="task".
+            //Kilde for trim(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim.
+            const inputFieldValue = document.getElementById("task").value.trim()
 
-                //Legger til oppgave i todolist HTML direkte.
-                document.getElementById("todolist").innerHTML += `
-                <li>
-                    <span class="task-text">${inputFieldValue}</span>
-                    <span class="task-status task-status-todo">To do</span>
-                </li>
-                `
-
-                //Tømmer inputfeltet hver gang funksjonen kjøres (onClick)
-                document.getElementById("task").value = ""
+            //Sjekker om inputFieldValue er tom. Hvis ja, vil en HTML-alert advare bruker og det vil ikke bli lagt til noe nytt i todos. Fant ut at det var mulig å sende inn inputfeltet med bare mellomrom. 
+            //Dette løste jeg ved å bruke .trim() på linjen over som definerer inputFieldValue. 
+            if (inputFieldValue === "") {
+                alert("Oppgaveteksten kan ikke være tom.")
+                //Asvlutter funkjsonen hvis TRUE. 
+                return
             }
-         }
-   
+            //Legger til text og status i array "todos"
+            todos.push({text: inputFieldValue, status: "To do"})
+
+            //Tømmer "todoLi" for å kunne regenere listen med nye oppgaver.
+            todoLi = ""
+            //Oppdaterer listen med den nye oppgaven.
+            todos.map((todo, index) => {
+                todoLi += `<li> 
+                    <span class="task-text">${todo.text}</span>
+                    <button id="statusButton" class="task-status ${todo.status === "Done" ? "task-status-done" : "task-status-todo"}" onclick="updateStatus(${index})">${todo.status}</button>
+                </li>`
+            })
+
+            //Skriver ut den oppdaterte listen i ul id="todolist".
+            document.getElementById("todolist").innerHTML = todoLi
+
+            //Tømmer inputfeltet hver gang funksjonen kjøres.
+            document.getElementById("task").value = ""
+
+            //Konsoll-logger at en ny oppgave er lagt til. 
+            console.log("Ny oppgave lagt til:", inputFieldValue)
+        }
+
+        
         //CLOCK
         //Kilde: https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock
         //Gjorde noen justeringer, nytt variabelnavn (clock), samt at jeg bruker setInterval på utsiden av funksjonen. Mener at dette er best practise, og gir best mulig brukeropplevelse.

@@ -213,3 +213,11 @@ footer {
     color: #fff;
     grid-area: footer;
 }
+
+
+/*Dette er rett fra ChatGPT for å fjerne design på button.*/
+/*Prompt: Er det mulig å skrive css kode som fjerner alt design på button slik at det ser ut som span?*/
+button {
+    all: unset; /* Fjerner all standard styling */
+    cursor: pointer; /* Beholder klikkbar funksjon */
+}

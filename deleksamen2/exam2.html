@@ -142,7 +142,7 @@
         ]
         
         //For å bekrefte at ny oppgave blir pushet til todos array.
-        console.log(todos)
+        // console.log(todos)
 
         //Tom variabel som sørger for at utskrift blir mulig.
         let todoLi = ""
@@ -161,6 +161,7 @@
 
         //Oppdaterer <ul id="todolist"> ved å sette den dynamiske verdien som lages i todoLi.
         document.getElementById("todolist").innerHTML = todoLi
+        // console.log(todos);
 
         // //Function med addEventListener som manipulerer HTML koden ved klikk.
         // //Hentet inspirasjon fra disse kildene: https://stackoverflow.com/questions/77786858/detect-click-inside-an-element-with-delegation-and-when-the-element-is-selected?utm_source=chatgpt.com
@@ -178,26 +179,40 @@
         //     }
         // })
 
+
+        //addEventListener med click på ul id="todolist". Function kjøres ved registrert klikk.
+        //Kilde: https://stackoverflow.com/questions/77786858/detect-click-inside-an-element-with-delegation-and-when-the-element-is-selected?utm_source=chatgpt.com
         document.getElementById("todolist").addEventListener("click", function(event) {
-    // Sjekker om det klikkede elementet i todolist har klassen "task-status".
-    if(event.target.classList.contains("task-status")) {
-        // Finn nærmeste li-element og dets index
-        const li = event.target.closest('li');
-        const allLis = Array.from(document.querySelectorAll('#todolist li'));
-        const index = allLis.indexOf(li);
-        
-        // Oppdater status i todos array
-        if (todos[index].status === "To do") {
-            todos[index].status = "Done";
-            
-            // Oppdater DOM
-            event.target.textContent = "Done";
-            event.target.classList.add("task-status-done");
-            event.target.classList.remove("task-status-todo");
-            console.log(todos);
-        }
-    }
-});
+            //Sjekker om elementet som klikkes på inneholder CSS-klassen "task-status"
+            if(event.target.classList.contains("task-status")) {
+                //Lagrer det nærmeste li-elementet som klikeks i "li". Dette må gjøres fordi den synlige statusen man klikker på i HTML er et span-element som ligger inni et li-element.
+                //De 3 variablene under brukte jeg AI for å få hjelp (ChatGPT, Dato: 11.12.24). Jeg brukte følgende prompt i tillegg til at jeg ga den koden jeg allerede hadde skrevet som manipulerte HTML,
+                //og som viser arrayet "todos."
+                //Prompt: Jeg ønsker å registrere klikkhendelser på listepunktene som ligger i ul id="todolist">). Hver oppgave har en status i array "todos" (To do eller Done) som vises i et <span>-element inni <li>. 
+                //Ved klikk på et status-element (<span>), skal koden finne indexen til det klikkede listeelementet. Videre må status i arrayet "todos" manipuleres. 
+                const li = event.target.closest('li');
+                //Alle li-elementer fra ul id="todolist" hentes og lagres i en NodeList. Dette er mulig ved hjelp av querySelectorAll.
+                //Deretter brukes Array.from for å lage en ekte array med dataen fra NodeListen. 
+                //Dette blir en kopi av array "todos", siden visningen i HTML speiler hva som allerede ligger der, i tillegg til nye oppgaver som blir pushet til "todos".
+                const copyTodos = Array.from(document.querySelectorAll('#todolist li'));
+                //Finner index til li-elementet som er klikket på.
+                const index = copyTodos.indexOf(li);
+                
+                //Sjekker om statusen til index vi har hentet over er "To do". 
+                if (todos[index].status === "To do") {
+                    //Hvis TRUE, endres status på valgt index til "Done" i "todos".
+                    todos[index].status = "Done";
+                    
+                    //Hvis TRUE, endres teksten til "Done", klassen "task-status-done" legges til og klassen "task-status-todo" fjernes.
+                    //Kilde: https://stackoverflow.com/questions/7723188/what-properties-can-i-use-with-event-target
+                    event.target.textContent = "Done";
+                    event.target.classList.add("task-status-done");
+                    event.target.classList.remove("task-status-todo");
+                    //Konsoll-logger todos for å bekrefte at statusendringen er gjort i arrayet. 
+                    console.log("Oppdatert array etter statusendring:", todos);
+                }
+            }
+        })
 
 
         //D-krav oppg.1:
@@ -212,7 +227,7 @@
                     alert("Oppgaveteksten kan ikke være tom.")
                     //Asvlutter funkjsonen hvis status er true. 
                     return 
-                }else {
+                } else {
 
                 //Legger til tekst og status i array "todos"
                 todos.push({text: inputFieldValue, status: "To do"})

@@ -43,7 +43,7 @@
             <ul id="todolist">
                 <!-- De to listeelementene skal byttes ut med utskrift av data fra programkoden i <script> -->
 
-                    <!--Kommenterer ut li-elementene siden jeg skal gjør det dynamisk med JavaScript.-->
+                    <!--Kommenterer ut li-elementene siden jeg skal lage de dynamisk med JavaScript.-->
                 <!-- <li>
                     <span class="tast-text">Les eksamensteksten</span>
                     <span class="task-status task-status-done">Done</span>
@@ -67,7 +67,7 @@
             {lastname: "Jansson", firstname: "Sigried", office: "B1", mail: "s.jansson@company.com"}
         ]
 
-        //C, 1: Etter endel research kom jeg frem til at jeg burde inkludere localeCompare når jeg sorterer arrayen, fordi norske navn ofte kan inneholde bokstaver utenfor det engelske alfabetet.
+        //Krav C, oppg. 1: Etter endel research kom jeg frem til at jeg burde inkludere localeCompare når jeg sorterer arrayen, fordi norske navn ofte kan inneholde bokstaver utenfor det engelske alfabetet.
         // Kilde for sort() og localCompare: https://wfernandoaugusto01.medium.com/sorting-data-alphabetically-localecompare-sort-e3d314708f8c
         contacts.sort((a, b) => a.lastname.localeCompare(b.lastname))
 
@@ -94,13 +94,15 @@
             {text: "Nettbutikksalg, uke 45", date: "13.11.24", amount: 2988}
         ]
 
+        //Krav C, oppg. 2: 
         //Tom variabel som sørger for at utskrift blir mulig.
-        let bookingLi = ""
+        let booksLi = ""
 
+        //Krav C, oppg. 2:
         //.map for å gå igjennom alle bokføringer i books-arrayen.
         books.map(book => {
-            //Generer og legger til linjene fra books i bookingLi.
-            bookingLi += `
+            //Generer og legger til linjene fra books i booksLi.
+            booksLi += `
             <div class="bookline">
                 <span class="booktext">${book.text}</span>
                 <span class="bookdate">${book.date}</span>
@@ -109,14 +111,16 @@
                 `
         })
 
-        //Oppdaterer <div id="booklines"> ved å sette den dynamiske verdien som lages i bookingLi.
-        document.getElementById("booklines").innerHTML = bookingLi
+        //Krav C, oppg. 2:
+        //Oppdaterer <div id="booklines"> ved å sette den dynamiske verdien som lages i booksLi.
+        document.getElementById("booklines").innerHTML = booksLi
 
         let equity = 23782; //Penger på konto ved inngangen til november
         document.getElementById("incomingequity").innerHTML = equity
 
         let balance = 0;    //Startbalanse for utregning av utgifter og inntekter i november
 
+        //Krav B, oppg. 2:
         //Bruker forEach fordi det fungerer bra for å gjøre matematisk utregning av tall i en array ref. LMS. 
         //Summerer amount i books-variabelen og lagrer det i balance.
         books.forEach(book => {
@@ -126,6 +130,7 @@
         //Skriver ut den nye utregnede balance til HTML.
         document.getElementById("balance").innerHTML = balance
 
+        //Krav B, oppg. 3:
         //Regner ut ny egenkapital med å definere variabel (newEquity).
         let newEquity = equity + balance
 
@@ -146,7 +151,7 @@
 
         //Bruker .map for å gå igjennom alle oppgavene i array "todos" og legger de til i "todoLi".
         todos.map((todos, index) => {
-            //Legger til nytt <li> med oppgavetekst og status i todoLi. Dette gjør HTML-elementet dynamisk. Jeg legger det inni en button slik at jeg senere kan bruke onclick for å oppdatere status.
+            //Legger til nytt <li> med oppgavetekst og status i todoLi. Dette gjør HTML-elementet dynamisk. Jeg legger det inni en button (fjerner span) slik at jeg senere kan bruke onclick for å oppdatere status.
             //Bruker en ternary operator for å sjekke betingelse ("Done"). Da får listepunktet css-klassen "task-status-done". Hvis ikke, "task-status-todo".
             todoLi += `<li> 
                 <span class="task-text">${todos.text}</span>
@@ -157,6 +162,7 @@
         //Oppdaterer <ul id="todolist"> ved å sette den nye dynamiske verdien som lagres i "todoLi".
         document.getElementById("todolist").innerHTML = todoLi
 
+        //Krav A: 
         //Funksjon for å oppdatere status i arrayet "todos".
         //Hvis button som har onclick="updateStatus(${index})" klikkes på, kjøres denne funksjonen.
         function updateStatus(index) {
@@ -183,12 +189,15 @@
             console.log("Oppdatert status:", todos)
         }
 
+        //Krav D, oppg. 1: Lagrer ny oppgave i "todos".
+        //Krav B, oppg. 1: Listen blir oppdatert så fort bruker legger til ny oppgave.
         //Funksjon for å legge til ny oppgave
         function saveTaskClick() {
             //Definerer variabel som henter tekst fra input feltet med id="task".
             //Kilde for trim(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim.
             const inputFieldValue = document.getElementById("task").value.trim()
 
+            //Krav C, oppg. 3:
             //Sjekker om inputFieldValue er tom. Hvis ja, vil en HTML-alert advare bruker og det vil ikke bli lagt til noe nytt i todos. Fant ut at det var mulig å sende inn inputfeltet med bare mellomrom. 
             //Dette løste jeg ved å bruke .trim() på linjen over som definerer inputFieldValue. 
             if (inputFieldValue === "") {
@@ -196,6 +205,7 @@
                 //Asvlutter funkjsonen hvis TRUE. 
                 return
             }
+
             //Legger til text og status i array "todos"
             todos.push({text: inputFieldValue, status: "To do"})
 
@@ -219,7 +229,7 @@
             console.log("Ny oppgave lagt til:", inputFieldValue)
         }
 
-        
+        //Krav D, oppg. 2-4: 
         //CLOCK
         //Kilde: https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock
         //Gjorde noen justeringer, nytt variabelnavn (clock), samt at jeg bruker setInterval på utsiden av funksjonen. Mener at dette er best practise, og gir best mulig brukeropplevelse.

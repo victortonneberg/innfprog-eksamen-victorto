@@ -50,13 +50,14 @@
         const generateAllBtn = document.getElementById("generateAll")
         const resetColorBtn = document.getElementById("emptyArray")
 
+        //Krav C, oppg. 2:
         //Funksjon som endrer status på addColorBtn til disabled hvis hexaArray.length er 10.
         //Kilde: https://www.w3schools.com/jsreF/prop_pushbutton_disabled.asp
         function disableaddColorBtn() {
             addColorBtn.disabled = hexaArray.length >= 10
         }
 
-        //addEventListener for "Legg til en farge"-button.
+        //addEventListener for "Legg til en farge"-button. Når knappen trykkes kjøres funksjonen.
         addColorBtn.addEventListener("click", function() {
             //Sjekker om lengden på hexaArray < 10 (fordi array starter med index 0). Hvis true, genererer den hexa-fargekode.
             //Kilde for generering av random hexa-fargekode: https://css-tricks.com/snippets/javascript/random-hex-color/
@@ -76,7 +77,8 @@
             disableaddColorBtn()
         })
 
-        //addEventListener for "Generer 10 nye farger"-button.
+        //Krav C, oppg. 1: 10 nye farger genereres og bytter ut de allerede eksisterende fargene i hexaArray.
+        //addEventListener for "Generer 10 nye farger"-button. Når knappen trykkes kjøres funksjonen.
         generateAllBtn.addEventListener("click", function () {
             //Tømmer hexaArray for allerede genererte farger slik at det genereres nye tilfeldige hexakoder.
             hexaArray = []
@@ -98,12 +100,14 @@
             disableaddColorBtn()
         })
 
-        //addEventListener for "Tilbakestill fargene".
+        //Krav D, oppg. 2:
+        //addEventListener for "Tilbakestill fargene". Når knappen trykkes kjøres funksjonen.
         resetColorBtn.addEventListener("click", function() {
 
             //Tømmer hexaArray for alle lagrede farger.
             hexaArray = []
 
+            //Krav D, oppg. 3:
             //Fjerner alt innhold som er tegnet i canvas.
             ctx.clearRect(0, 0, canvas.width, canvas.width)
 
@@ -115,7 +119,9 @@
 
         })
 
-        //addEventListener for "Lagre ny farge"
+        //Krav B, oppg. 1-3:
+        //Krav A, oppg. 1-2:
+        //addEventListener for "Lagre ny farge". Når knappen trykkes kjøres funksjonen.
         saveNewColor.addEventListener("click", function() {
 
             //Henter verdien fra input-feltet id="newColor" der ny fargekode skrives.
@@ -169,36 +175,56 @@
             console.log("Oppdatert hexaArray:", hexaArray)
         })
 
-
+        //Krav D, oppg. 1: Lagrede farger skrives ut til canvas. Det skjer ved hjelp av requestAnimationFrame fordi jeg kjører function drawColors() i renderCanvas().
         function drawColors() {
             //Fjerner alt tidligere innhold som er tegnet i canvas.
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
             //Bruker forEach for å iterere igjennom hvert element i hexaArray.
-            //Sender med parameterne color (fargekoden) og index (posisjonen i hexaArray). 
+            //Sender med parameterne color (fargekoden) og index (posisjonen i hexaArray). Dette sørger for at canvaset alltid samsvarer med verdiene som ligger i hexaArray.
             //color gir hexakoden på den gjeldende indexen i arrayet.
             hexaArray.forEach((color, index) => {
-                
+                //Variabel for størrelse på firkantene (100x100px)
                 const square = 100
                 //For å plassere firkant på riktig plassering, regner ut hvor på x-akse den skal plasseres basert på index i array.
                 const squareX = index * square
                 
                 //Tegner fargekvadradet.
+                ctx.beginPath()
                 ctx.fillStyle = color
-                ctx.fillRect(squareX, 0, square, square)
+                ctx.rect(squareX, 0, square, square)
+                ctx.fill()
+                ctx.closePath()
 
-                //Tegner hexakoden i fargekvadradet i tillegg til et hvitt rektangel i bakgrunn.
+                //Tegner et hvitt rektangel i fargekvadradet.
+                ctx.beginPath()
                 ctx.fillStyle = "white"
-                ctx.fillRect(squareX + 0, 0, 60, 20)
+                //Setter startposisjon, og bredde og høyde på rektangelet.
+                ctx.rect(squareX + 0, 0, 60, 20)
+                ctx.fill()
+                ctx.closePath()
+
+                //Tegner hexakoden
+                ctx.beginPath()
                 ctx.fillStyle = "black"
                 ctx.font = "12px Arial"
+                //Setter startposisjon, samt avstand fra venstre og toppen. Skriver ut fargekode lagret i color.
                 ctx.fillText(color, squareX + 5, 15)
+                ctx.closePath()
 
-                //Tegner hvilken index i hexaArray som tegnes i tillegg til et hvitt rektangel i bakgrunn.
+                // Tegner hvitt rektangel i bakgrunn av index.
+                ctx.beginPath()
                 ctx.fillStyle = "white"
-                ctx.fillRect(squareX + square - 25, square - 20, 25, 25);
+                //Setter startposisjon og andre justeringer på posisjon. Bredde og høyde satt til 25px.
+                ctx.rect(squareX + square - 25, square - 20, 25, 25);
+                ctx.fill()
+                ctx.closePath()
+
+                //Tegner hvilken index i hexaArray som tegnes.
+                ctx.beginPath()
                 ctx.fillStyle = color
                 ctx.fillText(index + 1, squareX + square - 15, square - 5)
+                ctx.closePath()
             })
         }
 
@@ -207,6 +233,8 @@
         const requestAnimationFrame = window.requestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
         function renderCanvas() {
 
+            //Kjører funksjonen drawColors. Denne funkjsonen sørger for at strukturen og fargefirkantene tegnes på canvaset. 
+            //requestAnimationFrame sørger for at endringer som skjer i hexaArray umiddelbart blir tegnet på canvaset.
             drawColors()
             
             requestAnimationFrame(renderCanvas)

@@ -29,7 +29,7 @@
 
         function decode(input) {
             const alphabet = 'abcdefghijklmnopqrstuvwxyzæøå'
-            const alphabetUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ' //Feil 1: Denne linjen. Manglet apostrof i string med alfabetet. Løste det ved å legge på ' på slutten av string. 
+            const alphabetUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ' //Feil 1: Denne linjen (32). Manglet apostrof i string med alfabetet. Løste det ved å legge på ' på slutten av string. 
 
             const getPreviousChar = (char, alphabet) => {
                 const index = alphabet.indexOf(char);
@@ -37,7 +37,7 @@
             };
 
             return input.split('').map(char => {
-                if (alphabet.includes(char)) { //Feil 4: Denne linjen. Ekstra T etter "alphabet". Løste ved å fjerne den ekstra bokstaven.
+                if (alphabet.includes(char)) { //Feil 4: Denne linjen (40). Ekstra T etter "alphabet". Løste ved å fjerne den ekstra bokstaven.
                     return getPreviousChar(char, alphabet)
                 } else if (alphabetUpper.includes(char)) {
                     return getPreviousChar(char, alphabetUpper)
@@ -49,9 +49,9 @@
         //PRINT DECODED MATERIAL
         document.getElementById("heading").innerHTML = decode(code.hx)
         document.getElementById("intro").innerHTML = decode(code.ix)
-        document.getElementById("q1").innerHTML = decode(code.qx[0]) //Feil 5: Denne linjen. Var skrevet "innerhtml", og løste det ved å skrive "innerHTML". JS er case-sensetive.
-        document.getElementById("q2").innerHTML = decode(code.qx[1]) //Feil 6: Denne linjen. Var skrevet "getElementByID", og løste det ved å skrive "getElementById". JS er case-sensetive.
-        document.getElementById("q3").innerHTML = decode(code.qx[2]) //Feil 2: Denne linjen. Manglet bracket på enden av tallet 2. Løste ved å legge på bracket eter 2-tallet.
+        document.getElementById("q1").innerHTML = decode(code.qx[0]) //Feil 5: Denne linjen (52). Var skrevet "innerhtml", og løste det ved å skrive "innerHTML". JS er case-sensetive.
+        document.getElementById("q2").innerHTML = decode(code.qx[1]) //Feil 6: Denne linjen (53). Var skrevet "getElementByID", og løste det ved å skrive "getElementById". JS er case-sensetive.
+        document.getElementById("q3").innerHTML = decode(code.qx[2]) //Feil 2: Denne linjen (54). Manglet bracket på enden av tallet 2. Løste ved å legge på bracket eter 2-tallet.
         document.getElementById("delivery").innerHTML = decode(code.dx)
     </script>
 </body>
